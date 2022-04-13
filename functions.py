@@ -1,4 +1,5 @@
 import math
+import pytest
 
 ## opens a file in read mode
 ## filename received as a parameter
@@ -57,3 +58,38 @@ def greetUser(first, middle, last):
 ## attempts to display the item at the index provided
 def displayItem(numbers, index):
     print("Your item at", index, "index is", numbers[index])
+
+
+##################Test Files#################
+##not worked
+def test_openFile():
+    assert openFile("testing.txt") == None
+
+##not worked
+def test_numbers():
+    assert numbers() == 4
+
+##not worked
+def test_dist():
+    assert dist() == 9
+
+##not worked
+def test_isPalindrome():
+    assert isPalindrome("hello") == 0
+
+##not worked
+def test_divide():
+    assert divide(1,2) == .5
+
+##not worked
+def test_sq():
+    assert sq(2) == 0
+
+##not worked
+def test_greetUser():
+    assert greetUser("hello", "something", "somthing") == None
+
+##not worked
+def test_displayItem():
+    assert displayItem([1,2,3,4], 2) == 4
+
