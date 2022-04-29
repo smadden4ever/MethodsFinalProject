@@ -1,3 +1,4 @@
+CREATE DATABASE MTgroupProject;
 create table items (
 	itemid serial primary key,
 	stock int,
