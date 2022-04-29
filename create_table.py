@@ -28,7 +28,7 @@ def create_tables():
 	        itemid int not null references items(itemid),
 	        username varchar(25) not null references users(username),
 	        quantity int,
-	        orderid int,
+	        orderid serial,
 	        ordered bool
         )
         """)
