@@ -3,7 +3,8 @@ fake_username = "admin"
 fake_password = "password"
 logged_in = False;
 
-
+import psycopg2
+from config import config
 
 # Userchoice function that does basic input test with values being amount of choices
 def userChoice(values):
