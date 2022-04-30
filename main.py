@@ -21,27 +21,27 @@ def userChoice(values):
         return userChoice(values)
 
 # Menu that display's when the user wants to view items in the store 
-def viewStore():
+def viewStore(connection, user):
     print("1. Choose Category\n2. Go back to the menu")
     user_choice = userChoice({1, 2})
     match user_choice:
         case 1:
             print("Store info:")
-            loggedInMenu()
+            loggedInMenu(connection, user)
         case 2:
-            loggedInMenu()
+            loggedInMenu(connection, user)
 
 # Menu that display's when the user wants to view items in the store 
-def viewOrderHistory():
+def viewOrderHistory(connection, user):
     print("View Order History:")
     print("1. Go back to the menu")
     user_choice = userChoice({1})
     match user_choice:
         case 1:
-           loggedInMenu()
+           loggedInMenu(connection, user)
 
 # Menu that display's the user's cart and information
-def viewCart():
+def viewCart(connection, user):
     print("1. View Cart\n2. Remove Item from Cart\n3. Checkout\n4. Go back to the menu")
     user_choice = userChoice({1, 2, 3, 4})
     match user_choice:
@@ -53,22 +53,22 @@ def viewCart():
             loggedInMenu()
         case 3:
             print("Checkout cart")
-            loggedInMenu()
+            loggedInMenu(connection, user)
         case 4:
-            loggedInMenu()
+            loggedInMenu(connection, user)
 
 # Menu that let's the user edit their account information
 
-def editAccountInfo():
+def editAccountInfo(connection, user):
     print("1. Edit Shipping Information\n2. Edit Payment Information\n3. Delete Account\n4. Go back to the menu")
     user_choice = userChoice({1, 2, 3, 4})
     match user_choice:
         case 1:
             print("Edit Shipping Info")
-            loggedInMenu()
+            loggedInMenu(connection, user)
         case 2:
             print("Edit Payment Info")
-            loggedInMenu()
+            loggedInMenu(connection, user)
         case 3:
             print("Are you sure you want to delete your account?")
             print("1. Yes\n2. No")
@@ -77,47 +77,48 @@ def editAccountInfo():
                 case 1:
                     logged_in = False;
                     print("Deleted account returning to menu")
-                    menu()
+                    menu(connection, user)
                 case 2:
-                    loggedInMenu()
+                    loggedInMenu(connection, user)
         case 4:
-            loggedInMenu()
+            loggedInMenu(connection, user)
 
 
 # Menu that display's when the user wants to view items in the store 
-def viewStore():
+def viewStore(connection, user):
     print("1. Choose Category\n2. Go back to the menu")
     user_choice = userChoice({1, 2})
     match user_choice:
         case 1:
             print("Store info:")
-            loggedInMenu()
+            loggedInMenu(connection, user)
         case 2:
-            loggedInMenu()
+            loggedInMenu(connection, user)
        
         
 # Menu that displays when the user is logged in       
-def loggedInMenu():
+def loggedInMenu(connection, user):
+    print("Your logged in",)
     print("1. View Items in Store\n2. View Order History\n3. Cart Information\n4. Edit Account Information\n5. Logout\n6. Exit Program")
     user_choice = userChoice({1, 2, 3, 4, 5, 6})
     match user_choice:
         case 1:
-            viewStore()
+            viewStore(connection, user)
         case 2:
-            viewOrderHistory()
+            viewOrderHistory(connection, user)
         case 3:
-            viewCart()
+            viewCart(connection, user)
         case 4:
-            editAccountInfo()
+            editAccountInfo(connection, user)
         case 5:
             logged_in = False;
-            menu()
+            menu(connection, user)
         case 6:
             print("Exiting the program")
             exit()
 
 # Menu which display's when the user wants to log in
-def login():
+def login(connection, user):
     print("1. Enter username and password\n2. Go back to the menu")
     user_choice = userChoice({1, 2})
     match user_choice:
@@ -127,33 +128,44 @@ def login():
             username = input();
             print("Enter Password: ", end = '')
             password = input();
-            if ((username == fake_username) & (password == fake_password)):
+            
+            if (user.login(connection, username, password)):
                 logged_in = True
-                loggedInMenu()
+                loggedInMenu(connection, user)
             else: 
                 print("Invalid credentials, please try again.")
-                login()
+                login(connection, user)
         case 2:
-            menu()
+            menu(connection, user)
        
     
 
     
 # Menu that displays when the user wants to create an account
-def createAccount(connection):
+def createAccount(connection, user):
     print("Enter username and password to create")
-    User().createAccount(connection)
+    print("Enter username")
     username = input()
-
-# The main menu 
-def menu(connection):
+    print("Enter password")
+    password = input()
+    print("Enter first name")
+    first_name = input()
+    print("Enter last name")
+    last_name = input()
+    
+    if (user.createAccount(connection, username, first_name, last_name, password)):
+        logged_in = True
+        loggedInMenu(connection, user)
+    
+def menu(connection, user):
+    
     print("1. Login\n2. Create Account\n3. Exit Program")
     user_choice = userChoice({1, 2, 3})
     match user_choice:
         case 1:
-            login()
+            login(connection, user)
         case 2:
-            createAccount(connection)
+            createAccount(connection, user)
         case 3:
             print("Exiting the program")
             exit()
@@ -163,6 +175,7 @@ def menu(connection):
         
 
 def main():
+    user = User()
     try:
         connection = mysql.connector.connect(
             host="localhost",
@@ -170,8 +183,8 @@ def main():
             password="",
             database="methods_project"
         )   
-        
-        menu(connection)
+                
+        menu(connection, user)
         
     except:
         print("Failed connection.")
