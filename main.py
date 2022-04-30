@@ -3,9 +3,11 @@ fake_username = "admin"
 fake_password = "password"
 logged_in = False;
 
-import psycopg2
-from config import config
-from create_table import create_tables
+from UserClass import User
+import mysql.connector
+import sys
+
+    
 
 # Userchoice function that does basic input test with values being amount of choices
 def userChoice(values):
@@ -187,8 +189,23 @@ def menu():
         
 
 def main():
-    create_tables()
-    menu()
+    try:
+        connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="methodsproject"
+        )
+    
+        # p1 = User("John", 36)
+        # p1.myfunc()
+        menu()
+
+    except:
+        print("Failed connection.")
+
+        ## exits the program if unsuccessful
+        sys.exit()
 
 if __name__ == "__main__":
     main()
