@@ -21,5 +21,5 @@ create table cart (
 	username varchar(25) not null references users(username),
 	quantity int,
 	orderid serial,
-	ordered bool
+	ordered boolean
 );
