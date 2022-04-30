@@ -168,18 +168,20 @@ def login():
 
     
 # Menu that displays when the user wants to create an account
-def createAccount():
+def createAccount(connection):
     print("Enter username and password to create")
+    User().createAccount(connection)
+    username = input()
 
 # The main menu 
-def menu():
+def menu(connection):
     print("1. Login\n2. Create Account\n3. Exit Program")
     user_choice = userChoice({1, 2, 3})
     match user_choice:
         case 1:
             login()
         case 2:
-            createAccount()
+            createAccount(connection)
         case 3:
             print("Exiting the program")
             exit()
@@ -194,13 +196,11 @@ def main():
             host="localhost",
             user="root",
             password="",
-            database="methodsproject"
-        )
-    
-        # p1 = User("John", 36)
-        # p1.myfunc()
-        menu()
-
+            database="methods_project"
+        )   
+        
+        menu(connection)
+        
     except:
         print("Failed connection.")
 
