@@ -4,12 +4,26 @@ fake_password = "password"
 logged_in = False;
 
 from UserClass import User
+
+
 import mysql.connector
 import sys
 
     
 
 # Userchoice function that does basic input test with values being amount of choices
+
+def intSpecificChoice(input_string):
+    
+    try:
+        user_input = int(input(input_string))
+        return user_input
+        
+    except:
+        print("Please input a valid integer")
+        return intSpecificChoice(input_string)
+
+
 def userChoice(values):
     try:
         user_input = int(input())
@@ -65,10 +79,16 @@ def editAccountInfo(connection, user):
     match user_choice:
         case 1:
             print("Edit Shipping Info")
-            loggedInMenu(connection, user)
+            shipping_address = input("Enter shipping address: ")
+            shipping_state = input("Enter shipping state: ")
+            shipping_zipcode = intSpecificChoice("Enter shipping zip code: ")
+            if (user.editAccount(connection, user.getUsername(), shipping_address, shipping_state, shipping_zipcode, None)):
+                loggedInMenu(connection, user)
         case 2:
             print("Edit Payment Info")
-            loggedInMenu(connection, user)
+            ccnum = int(input("Enter credit card number: "))
+            if (user.editAccount(connection, user.getUsername(), None, None, None, ccnum)):
+                loggedInMenu(connection, user)
         case 3:
             print("Are you sure you want to delete your account?")
             print("1. Yes\n2. No")
@@ -76,8 +96,13 @@ def editAccountInfo(connection, user):
             match confirm:
                 case 1:
                     logged_in = False;
-                    print("Deleted account returning to menu")
-                    menu(connection, user)
+                    if (user.deleteAccount(connection, user.getUsername())):
+                        print("Deleted account returning to menu")
+
+                        menu(connection, user)
+                    else:
+                        print("Error deleting account")
+                        loggedInMenu(connection, user)
                 case 2:
                     loggedInMenu(connection, user)
         case 4:
@@ -98,7 +123,7 @@ def viewStore(connection, user):
         
 # Menu that displays when the user is logged in       
 def loggedInMenu(connection, user):
-    print("Your logged in",)
+   
     print("1. View Items in Store\n2. View Order History\n3. Cart Information\n4. Edit Account Information\n5. Logout\n6. Exit Program")
     user_choice = userChoice({1, 2, 3, 4, 5, 6})
     match user_choice:
@@ -131,6 +156,7 @@ def login(connection, user):
             
             if (user.login(connection, username, password)):
                 logged_in = True
+                print("Your logged in")
                 loggedInMenu(connection, user)
             else: 
                 print("Invalid credentials, please try again.")
@@ -143,16 +169,16 @@ def login(connection, user):
     
 # Menu that displays when the user wants to create an account
 def createAccount(connection, user):
-    print("Enter username")
-    username = input()
-    print("Enter password")
-    password = input()
-    print("Enter first name")
-    first_name = input()
-    print("Enter last name")
-    last_name = input()
-  
-    if (user.createAccount(connection, username, first_name, last_name, password)):
+   
+    username = input("Enter username: ")
+    password = input("Enter password: ")
+    first_name = input("Enter first name: ")
+    last_name = input("Enter last name: ")
+    shipping_address = input("Enter Shipping address: ")
+    shipping_state = input("Enter shipping state: ")
+    shipping_zip = intSpecificChoice("Enter shipping zip code: ")
+    ccnum = intSpecificChoice("Enter credit card number: ")
+    if (user.createAccount(connection, username, first_name, last_name, password, shipping_address, shipping_state, shipping_zip, ccnum)):
         logged_in = True
         loggedInMenu(connection, user)
     else:
@@ -167,6 +193,7 @@ def menu(connection, user):
         case 2:
             createAccount(connection, user)
         case 3:
+            connection.close()
             print("Exiting the program")
             exit()
     
