@@ -29,7 +29,7 @@ class User:
       
       return True
     else:
-           
+      return False
             
         
         
@@ -39,27 +39,28 @@ class User:
   def createAccount(self, connection, username, firstname, lastname, password):
   
     cursor = connection.cursor()
-    #cursor.execute("SELECT EXISTS(SELECT * from users WHERE username=%(username)s)", {'username' :username})
+    cursor.execute("SELECT EXISTS(SELECT * from users WHERE username=%(username)s)", {'username' :username})
+    checkUsername = cursor.fetchone()
    
-
-    #cursor.execute("SELECT username FROM users WHERE WHERE username=%(username)s)", {'username' :username})
-    # cursor.execute("SELECT EXISTS(SELECT * from users WHERE username=%(username)s)", {'username' :username})
-    # checkUsername = cursor.fetchone()
-    # print(checkUsername)
-    # if checkUsername != 0:
-    #   print('Username does not exist')
-    # else:
-    #   print('Logged In!')
-    query = "INSERT INTO users (username, firstname, lastname, password) VALUES (%s, %s, %s, %s)"
-    data = (username, firstname, lastname, password)
-    cursor.execute(query, data)
-    connection.commit()
-    print("Account created")
-    self.username = username
-    self.firstname = firstname
-    self.lastname = lastname
-    self.password = password
-    return True
+    if (checkUsername[0] == 0):
+      query = "INSERT INTO users (username, firstname, lastname, password) VALUES (%s, %s, %s, %s)"
+      data = (username, firstname, lastname, password)
+      try:
+        cursor.execute(query, data)
+        connection.commit()
+        print("Account created")
+        self.username = username
+        self.firstname = firstname
+        self.lastname = lastname
+        self.password = password
+        return True
+      except:
+        print('Account not created')
+    else:
+      print("Account already exists")
+      return False
+    
+   
   
     
    

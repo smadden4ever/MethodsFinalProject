@@ -143,7 +143,6 @@ def login(connection, user):
     
 # Menu that displays when the user wants to create an account
 def createAccount(connection, user):
-    print("Enter username and password to create")
     print("Enter username")
     username = input()
     print("Enter password")
@@ -152,11 +151,12 @@ def createAccount(connection, user):
     first_name = input()
     print("Enter last name")
     last_name = input()
-    
+  
     if (user.createAccount(connection, username, first_name, last_name, password)):
         logged_in = True
         loggedInMenu(connection, user)
-    
+    else:
+        menu(connection, user)
 def menu(connection, user):
     
     print("1. Login\n2. Create Account\n3. Exit Program")
