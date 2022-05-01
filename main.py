@@ -4,6 +4,7 @@ fake_password = "password"
 logged_in = False;
 
 from UserClass import User
+from ItemClass import Item
 import mysql.connector
 import sys
 
@@ -122,39 +123,11 @@ def login():
     user_choice = userChoice({1, 2})
     match user_choice:
         case 1:
-   
+            
             print("Enter Username: ", end = '')
             username = input();
             print("Enter Password: ", end = '')
             password = input();
-
-            sql = """
-                    SELECT username 
-                    FROM   users
-                    WHERE  username = %(username)s
-                        AND users.password = %(password)s
-                    """
-            data = ()
-            conn = None
-            try:
-                # read database configuration
-                params = config()
-                # connect to the PostgreSQL database
-                conn = psycopg2.connect(**params)
-                # create a new cursor
-                cur = conn.cursor()
-                # execute the INSERT statement
-                cur.execute(sql, {'username': username, 'password': password})
-                # commit the changes to the database
-                conn.commit()
-                # close communication with the database
-                cur.close()
-            except (Exception, psycopg2.DatabaseError) as error:
-                print(error)
-            finally:
-                if conn is not None:
-                    conn.close()
-
             if ((username == fake_username) & (password == fake_password)):
                 logged_in = True
                 loggedInMenu()
@@ -170,7 +143,7 @@ def login():
 # Menu that displays when the user wants to create an account
 def createAccount(connection):
     print("Enter username and password to create")
-    User().createAccount(connection)
+    #User().createAccount(connection)
     username = input()
 
 # The main menu 
@@ -199,13 +172,15 @@ def main():
             database="methods_project"
         )   
         
-        menu(connection)
-        
     except:
         print("Failed connection.")
 
         ## exits the program if unsuccessful
         sys.exit()
+    Item.viewAll(connection)
+    Item.removeAmountFromStockOf(connection, 5, 2)
+    Item.viewAll(connection)
+    menu(connection)
 
 if __name__ == "__main__":
     main()
