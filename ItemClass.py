@@ -24,6 +24,15 @@ class Item:
         cursor.execute('UPDATE items SET stock = %s WHERE itemid = %s', (int(updatedStock), itemid, ))
         connection.commit()
         return True
+    
+    def addAmountFromStockOf(self, connection, quantity, itemid):
+        stock = self.getStockOf(connection, itemid)
+       
+        updatedStock = int(stock) + int(quantity)
+        cursor = connection.cursor()
+        cursor.execute('UPDATE items SET stock = %s WHERE itemid = %s', (int(updatedStock), itemid, ))
+        connection.commit()
+        return True
 
     def getStockOf(self, connection, itemid):
         cursor = connection.cursor()

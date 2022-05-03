@@ -79,8 +79,9 @@ def viewCart(connection, user, inventory, cart):
         case 2:
             print("Please enter the movie id of the item you'd like to remove from your cart: ")
             movieId = input()
-            cart.removeFromCart(connection, user.getUsername(), movieId)
+            cart.removeFromCart(connection, user.getUsername(), movieId, inventory)
             viewCart(connection, user, inventory, cart)
+           
         case 3:
             cart.checkoutCart(connection, user.getUsername())
             viewCart(connection, user, inventory, cart)
@@ -127,7 +128,7 @@ def editAccountInfo(connection, user, inventory, cart):
         
 # Menu that displays when the user is logged in       
 def loggedInMenu(connection, user, inventory, cart):
-    print("You're logged in",)
+  
     print("1. View Items in Store\n2. View Order History\n3. Cart Information\n4. Edit Account Information\n5. Logout\n6. Exit Program")
     user_choice = userChoice({1, 2, 3, 4, 5, 6})
     match user_choice:
@@ -160,6 +161,7 @@ def login(connection, user, inventory, cart):
             
             if (user.login(connection, username, password)):
                 logged_in = True
+                print("You are logged in!")
                 loggedInMenu(connection, user, inventory, cart)
             else: 
                 print("Invalid credentials, please try again.")
