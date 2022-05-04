@@ -12,6 +12,12 @@ class User:
     def getUsername(self):
         return self.username
 
+    def getUserShippingInfo(self):
+      
+      print(self.firstname + " " + self.lastname + "\n")
+      print("Shipping Info" + "\n---------------------\n" + self.shippingaddress + " " + self.shippingstate + " " + str(self.shippingzip)  + "\n---------------------")
+      print("Card Info \n" + "---------------------\n" + str(self.ccnum)+ "\n---------------------")
+      
     def deleteAccount(self, connection, username):
         print(username)
         cursor = connection.cursor()
@@ -72,6 +78,7 @@ class User:
             self.shippingstate = checkUserData[5]
             self.shippingzip = checkUserData[6]
             self.ccnum = checkUserData[7]
+           
             cursor.close()
             return True
 

@@ -61,7 +61,7 @@ def viewStore(connection, user, inventory, cart):
 def viewOrderHistory(connection, user, inventory, cart):
     print("Your Order History:")
     order = Order()
-    order.viewOrderHistory(connection, user.getUsername())
+    order.viewOrderHistory(connection, user.getUsername(), user)
     print("1. Go back to the menu")
     user_choice = userChoice({1})
     match user_choice:
